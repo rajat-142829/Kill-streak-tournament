@@ -384,11 +384,11 @@
           <div class="flex flex-col md:flex-row justify-center gap-4">
             <a href="#" id="loginSignupJoinBtn" onclick="openLoginSignupModal()" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-md transition duration-300">Login/Signup and Join Tournament</a>
           </div>
-          <div class="mt-6 text-center">
+      <!--    <div class="mt-6 text-center">
             <button onclick="downloadHTML()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-md shadow-lg flex items-center justify-center mx-auto gap-2">
               <i class="fas fa-download"></i> Download HTML Code
             </button>
-          </div>
+          </div> -->
           <!-- NEW: WhatsApp Community Button -->
           <div class="mt-4 text-center">
             <a href="YOUR_WHATSAPP_COMMUNITY_LINK_HERE" target="_blank" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-md shadow-lg flex items-center justify-center mx-auto gap-2">
@@ -548,7 +548,7 @@
           <span class="close-button" onclick="hideViewTournamentSection()">×</span>
           <h3 class="text-xl font-bold mb-4 text-orange-400">Latest Updates:</h3>
           <div id="adminUpdates" class="space-y-4 text-gray-300">
-        <!--    <p class="text-red-500">Error loading updates.</p> -->
+      <!--      <p class="text-red-500">Error loading updates.</p> -->
           </div>
 
           <!-- Tournament Details for Registered Users -->
@@ -1037,12 +1037,8 @@ Step 2 - Click on Pay Button</textarea>
       let selectedTournamentForDetails = null; // To store the tournament selected for details/payment
 
       // Audio elements - Ensure correct paths
-      const notificationSound = new Audio('notification_sound.wav');
-      const addMoneySound = new Audio('add_money_sound.mp3');
-      
-      // Preload sounds to prevent delay
-      notificationSound.load();
-      addMoneySound.load();
+      const notificationSound = new Audio('MultipleFiles/notification_sound.wav');
+      const addMoneySound = new Audio('MultipleFiles/Add Money sound.mp3');
 
       // Last seen update timestamp for the current user
       // Using a default of 0 if not found, will be updated from Firestore
@@ -2624,12 +2620,10 @@ Step 2 - Click on Pay Button</textarea>
         notificationPopupTime.innerText = timestamp ? new Date(timestamp).toLocaleString() : '';
         notificationPopup.classList.add('show');
 
-        // Reset sound and play
-        notificationSound.currentTime = 0;
+        // Play sound, handling potential errors (e.g., user hasn't interacted yet)
         notificationSound.play().catch(e => {
-            console.warn("Notification sound error:", e);
-            // Show message to click anywhere to enable sounds
-            alert("Please click anywhere on the page to enable notification sounds");
+            console.warn("Notification sound auto-play blocked. User interaction needed.", e);
+            // Optionally, show a message to the user to click anywhere to enable sound
         });
 
         // Hide after 7 seconds
@@ -2760,13 +2754,10 @@ Step 2 - Click on Pay Button</textarea>
                     // In a more robust system, you'd check a 'lastDepositProcessedTimestamp'
                     // or listen to 'deposits' collection for 'approved' status changes.
                     if (newWalletBalance > walletBalance) {
-                        // Play add money sound and show notification
-                        addMoneySound.currentTime = 0;
-                        addMoneySound.play().catch(e => {
-                            console.error("Add money sound error:", e);
-                            alert("Please click anywhere on the page to enable payment sounds");
-                        });
-                        showNotificationPopup('Wallet Updated!', `₹${(newWalletBalance - walletBalance).toFixed(2)} added to your wallet!`, Date.now());
+                        // Play add money sound
+                        addMoneySound.play().catch(e => console.error("Error playing add money sound:", e));
+                        // Optionally, show a small notification for the deposit
+                        // showNotificationPopup('Wallet Updated!', `₹${(newWalletBalance - walletBalance).toFixed(2)} added to your wallet!`);
                     }
                     walletBalance = newWalletBalance; // Update local state
                     updateUI(); // Update wallet display
@@ -2804,21 +2795,6 @@ Step 2 - Click on Pay Button</textarea>
       }
 
       // Initial calls on DOMContentLoaded
-      // Enable sounds after first user interaction
-      document.addEventListener('click', function enableSounds() {
-        // Try playing a silent sound to unlock audio
-        const silentSound = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU...');
-        silentSound.volume = 0;
-        silentSound.play().then(() => {
-          console.log("Audio context unlocked");
-        }).catch(e => {
-          console.warn("Audio unlock failed:", e);
-        });
-        
-        // Remove this listener after first interaction
-        document.removeEventListener('click', enableSounds);
-      }, { once: true });
-
       document.addEventListener('DOMContentLoaded', () => {
         // Initial rendering functions
         renderAdminUpdatesContent();
