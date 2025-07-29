@@ -204,6 +204,10 @@
           <a href="#" class="nav-link" data-section="leaderboard"
             ><i class="fas fa-chart-bar"></i> Leaderboard</a
           >
+          <!-- NEW: Tournament History Nav Link -->
+          <a href="#" class="nav-link" data-section="tournament-history"
+            ><i class="fas fa-history"></i> Tournament History</a
+          >
           <a href="#" class="nav-link" id="adminLogoutBtn"
             ><i class="fas fa-sign-out-alt"></i> Logout</a
           >
@@ -247,12 +251,21 @@
         <!-- User Management Section -->
         <section id="users" class="admin-section hidden">
           <h2 class="text-3xl font-bold mb-6 text-orange-400">User Management</h2>
+          <div class="mb-4">
+            <input
+              type="text"
+              id="userSearchInput"
+              placeholder="Search by Name or FF UID..."
+              class="w-full p-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50"
+            />
+          </div>
           <div class="card overflow-x-auto">
             <table class="min-w-full">
               <thead>
                 <tr class="table-header">
                   <th>Name</th>
                   <th>Email</th>
+                  <th>FF UID</th> <!-- NEW: FF UID Column -->
                   <th>Wallet Balance</th>
                   <th>Actions</th>
                 </tr>
@@ -368,34 +381,85 @@
           >
             Add New Upcoming Update
           </button>
-          <div class="card">
-            <ul id="upcomingUpdatesList" class="space-y-4">
-              <!-- Upcoming updates will be loaded here -->
-            </ul>
+          <div class="card overflow-x-auto">
+            <table class="min-w-full">
+              <thead>
+                <tr class="table-header">
+                  <th>Name</th>
+                  <th>Mode</th>
+                  <th>Entry Fee</th>
+                  <th>Prize Pool</th>
+                  <th>Date & Time</th>
+                  <th>Registered / Total</th>
+                  <th>Description/Rules</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="upcomingUpdatesTableBody">
+                <!-- Upcoming updates will be loaded here -->
+              </tbody>
+            </table>
           </div>
         </section>
 
         <!-- Leaderboard Section -->
         <section id="leaderboard" class="admin-section hidden">
           <h2 class="text-3xl font-bold mb-6 text-orange-400">Leaderboard</h2>
-          <p class="text-gray-300 mb-4">
-            Manage leaderboard entries here. (Requires game integration for auto-updates)
-          </p>
+          <button
+            id="addLeaderboardEntryBtn"
+            class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md mb-4"
+          >
+            Add New Leaderboard Entry
+          </button>
           <div class="card overflow-x-auto">
             <table class="min-w-full">
               <thead>
                 <tr class="table-header">
                   <th>Rank</th>
                   <th>Player Name</th>
+                  <th>FF UID</th>
                   <th>Kills</th>
-                  <th>Points</th>
+                  <th>Winning Prize</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody id="leaderboardTableBody">
                 <!-- Leaderboard rows will be loaded here -->
                 <tr>
-                    <td colspan="5" class="text-center py-4 text-gray-400">Leaderboard data will appear here.</td>
+                    <td colspan="6" class="text-center py-4 text-gray-400">Leaderboard data will appear here.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- NEW: Tournament History Section -->
+        <section id="tournament-history" class="admin-section hidden">
+          <h2 class="text-3xl font-bold mb-6 text-orange-400">
+            Tournament History
+          </h2>
+          <button
+            id="addTournamentHistoryBtn"
+            class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md mb-4"
+          >
+            Add New History Entry
+          </button>
+          <div class="card overflow-x-auto">
+            <table class="min-w-full">
+              <thead>
+                <tr class="table-header">
+                  <th>Name</th>
+                  <th>Mode</th>
+                  <th>Prize Pool</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tournamentHistoryTableBody">
+                <!-- Tournament history rows will be loaded here -->
+                <tr>
+                    <td colspan="6" class="text-center py-4 text-gray-400">Tournament history will appear here.</td>
                 </tr>
               </tbody>
             </table>
@@ -520,14 +584,144 @@
         <form id="upcomingUpdateForm">
           <input type="hidden" id="upcomingUpdateId" />
           <div class="form-group">
-            <label for="upcomingUpdateContent">Upcoming Update Content:</label>
-            <textarea id="upcomingUpdateContent" rows="4" required></textarea>
+            <label for="upcomingUpdateName">Tournament Name:</label>
+            <input type="text" id="upcomingUpdateName" required />
+          </div>
+          <div class="form-group">
+            <label for="upcomingUpdateMode">Mode:</label>
+            <select id="upcomingUpdateMode" required>
+              <option value="solo">Solo</option>
+              <option value="duo">Duo</option>
+              <option value="squads">Squads</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="upcomingUpdateEntryFee">Entry Fee (₹):</label>
+            <input type="number" id="upcomingUpdateEntryFee" required />
+          </div>
+          <div class="form-group">
+            <label for="upcomingUpdatePrizePool">Prize Pool (₹):</label>
+            <input type="number" id="upcomingUpdatePrizePool" required />
+          </div>
+          <div class="form-group">
+            <label for="upcomingUpdateTotalSeats">Total Seats:</label>
+            <input type="number" id="upcomingUpdateTotalSeats" required min="1" />
+          </div>
+          <div class="form-group">
+            <label for="upcomingUpdateRegisteredSeats">Registered Seats:</label>
+            <input type="number" id="upcomingUpdateRegisteredSeats" required min="0" />
+          </div>
+          <div class="form-group">
+            <label for="upcomingUpdateDate">Date:</label>
+            <input type="date" id="upcomingUpdateDate" required />
+          </div>
+          <div class="form-group">
+            <label for="upcomingUpdateTime">Time:</label>
+            <input type="time" id="upcomingUpdateTime" required />
+          </div>
+          <div class="form-group">
+            <label for="upcomingUpdateDescription">Description / Rules:</label>
+            <textarea id="upcomingUpdateDescription" rows="4"></textarea>
           </div>
           <button
             type="submit"
             class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-md transition duration-300 w-full mt-4"
           >
             Save Upcoming Update
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Add/Edit Leaderboard Entry Modal -->
+    <div id="leaderboardEntryModal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" onclick="closeModal('leaderboardEntryModal')">×</span>
+        <h2
+          class="text-2xl font-bold text-center mb-6 text-orange-400"
+          id="leaderboardEntryModalTitle"
+        >
+          Add New Leaderboard Entry
+        </h2>
+        <form id="leaderboardEntryForm">
+          <input type="hidden" id="leaderboardEntryId" />
+          <div class="form-group">
+            <label for="leaderboardTournamentId">Tournament:</label>
+            <select id="leaderboardTournamentId" required>
+              <!-- Tournaments will be loaded here dynamically -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="leaderboardRank">Rank:</label>
+            <input type="number" id="leaderboardRank" required min="1" />
+          </div>
+          <div class="form-group">
+            <label for="leaderboardPlayerName">Player Name:</label>
+            <input type="text" id="leaderboardPlayerName" required />
+          </div>
+          <div class="form-group">
+            <label for="leaderboardUID">FF UID:</label>
+            <input type="text" id="leaderboardUID" required />
+          </div>
+          <div class="form-group">
+            <label for="leaderboardKills">Kills:</label>
+            <input type="number" id="leaderboardKills" required min="0" />
+          </div>
+          <div class="form-group">
+            <label for="leaderboardWinningPrize">Winning Prize (₹):</label>
+            <input type="number" id="leaderboardWinningPrize" required min="0" />
+          </div>
+          <button
+            type="submit"
+            class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-md transition duration-300 w-full mt-4"
+          >
+            Save Entry
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- NEW: Add/Edit Tournament History Modal -->
+    <div id="tournamentHistoryModal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" onclick="closeModal('tournamentHistoryModal')">×</span>
+        <h2
+          class="text-2xl font-bold text-center mb-6 text-orange-400"
+          id="tournamentHistoryModalTitle"
+        >
+          Add New Tournament History Entry
+        </h2>
+        <form id="tournamentHistoryForm">
+          <input type="hidden" id="historyEntryId" />
+          <div class="form-group">
+            <label for="historyTournamentName">Tournament Name:</label>
+            <input type="text" id="historyTournamentName" required />
+          </div>
+          <div class="form-group">
+            <label for="historyTournamentMode">Mode:</label>
+            <select id="historyTournamentMode" required>
+              <option value="solo">Solo</option>
+              <option value="duo">Duo</option>
+              <option value="squads">Squads</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="historyPrizePool">Prize Pool (₹):</label>
+            <input type="number" id="historyPrizePool" required />
+          </div>
+          <div class="form-group">
+            <label for="historyDate">Date:</label>
+            <input type="date" id="historyDate" required />
+          </div>
+          <div class="form-group">
+            <label for="historyStatus">Status:</label>
+            <input type="text" id="historyStatus" value="Completed" readonly />
+          </div>
+          <button
+            type="submit"
+            class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-md transition duration-300 w-full mt-4"
+          >
+            Save History Entry
           </button>
         </form>
       </div>
@@ -621,12 +815,14 @@
       const pendingWithdrawalsSpan = document.getElementById('pendingWithdrawals');
 
       const usersTableBody = document.getElementById('usersTableBody');
+      const userSearchInput = document.getElementById('userSearchInput'); // NEW
       const tournamentsTableBody = document.getElementById('tournamentsTableBody');
       const depositsTableBody = document.getElementById('depositsTableBody');
       const withdrawalsTableBody = document.getElementById('withdrawalsTableBody');
       const updatesList = document.getElementById('updatesList');
-      const upcomingUpdatesList = document.getElementById('upcomingUpdatesList');
+      const upcomingUpdatesTableBody = document.getElementById('upcomingUpdatesTableBody'); // Changed from updatesList
       const leaderboardTableBody = document.getElementById('leaderboardTableBody'); // NEW
+      const tournamentHistoryTableBody = document.getElementById('tournamentHistoryTableBody'); // NEW
 
       const addTournamentBtn = document.getElementById('addTournamentBtn');
       const tournamentModal = document.getElementById('tournamentModal');
@@ -643,6 +839,17 @@
       const upcomingUpdateModalTitle = document.getElementById('upcomingUpdateModalTitle');
       const upcomingUpdateForm = document.getElementById('upcomingUpdateForm');
 
+      const addLeaderboardEntryBtn = document.getElementById('addLeaderboardEntryBtn'); // NEW
+      const leaderboardEntryModal = document.getElementById('leaderboardEntryModal'); // NEW
+      const leaderboardEntryModalTitle = document.getElementById('leaderboardEntryModalTitle'); // NEW
+      const leaderboardEntryForm = document.getElementById('leaderboardEntryForm'); // NEW
+      const leaderboardTournamentIdSelect = document.getElementById('leaderboardTournamentId'); // NEW
+
+      const addTournamentHistoryBtn = document.getElementById('addTournamentHistoryBtn'); // NEW
+      const tournamentHistoryModal = document.getElementById('tournamentHistoryModal'); // NEW
+      const tournamentHistoryModalTitle = document.getElementById('tournamentHistoryModalTitle'); // NEW
+      const tournamentHistoryForm = document.getElementById('tournamentHistoryForm'); // NEW
+
       const viewPlayersModal = document.getElementById('viewPlayersModal'); // NEW
       const registeredPlayersTableBody = document.getElementById('registeredPlayersTableBody'); // NEW
 
@@ -654,6 +861,7 @@
       const fundsAmountInput = document.getElementById('fundsAmount'); // NEW
 
       let currentAdminUser = null;
+      let allUsers = []; // To store all users for client-side search
 
       // --- Admin Authentication ---
       auth.onAuthStateChanged(async (user) => {
@@ -665,13 +873,14 @@
             adminLoginModal.style.display = 'none';
             adminPanelContent.classList.remove('hidden');
             loadDashboardData();
-            loadUsers();
+            loadUsers(); // Initial load of users
             loadTournaments();
             loadDepositRequests();
             loadWithdrawalRequests();
             loadAdminUpdates();
             loadUpcomingUpdates();
             loadLeaderboard(); // Load leaderboard data
+            loadTournamentHistory(); // Load tournament history data
           } else {
             // Not an admin, log them out
             await auth.signOut();
@@ -754,23 +963,45 @@
       async function loadUsers() {
         usersTableBody.innerHTML = '';
         const usersSnapshot = await db.collection('users').get();
-        usersSnapshot.forEach((doc) => {
-          const user = doc.data();
+        allUsers = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); // Store all users
+        displayUsers(allUsers); // Display all users initially
+      }
+
+      function displayUsers(usersToDisplay) {
+        usersTableBody.innerHTML = '';
+        if (usersToDisplay.length === 0) {
+          usersTableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-gray-400">No users found.</td></tr>`;
+          return;
+        }
+        usersToDisplay.forEach((user) => {
           const row = `
                     <tr class="table-row">
                         <td>${user.name || 'N/A'}</td>
                         <td>${user.email || 'N/A'}</td>
+                        <td>${user.ffUID || 'N/A'}</td> <!-- NEW: Display FF UID -->
                         <td>₹${(user.walletBalance || 0).toFixed(2)}</td>
                         <td>
-                            <button onclick="viewUser('${doc.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm mr-2">View</button>
-                            <button onclick="openAddFundsModal('${doc.id}', '${user.name || user.email}', '${user.email}')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-sm mr-2">Add Funds</button>
-                            <button onclick="deleteUser('${doc.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm">Delete</button>
+                            <button onclick="viewUser('${user.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm mr-2">View</button>
+                            <button onclick="openAddFundsModal('${user.id}', '${user.name || user.email}', '${user.email}')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-sm mr-2">Add Funds</button>
+                            <button onclick="deleteUser('${user.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm">Delete</button>
                         </td>
                     </tr>
                 `;
           usersTableBody.innerHTML += row;
         });
       }
+
+      // User Search Functionality
+      userSearchInput.addEventListener('keyup', () => {
+        const searchTerm = userSearchInput.value.toLowerCase();
+        const filteredUsers = allUsers.filter(user => {
+          const nameMatch = (user.name || '').toLowerCase().includes(searchTerm);
+          const ffUIDMatch = (user.ffUID || '').toLowerCase().includes(searchTerm); // NEW: Search by FF UID
+          return nameMatch || ffUIDMatch; // Search by name OR FF UID
+        });
+        displayUsers(filteredUsers);
+      });
+
 
       async function viewUser(userId) {
         const userDoc = await db.collection('users').doc(userId).get();
@@ -803,6 +1034,7 @@
                 Name: ${user.name || 'N/A'}
                 Email: ${user.email || 'N/A'}
                 Mobile: ${user.mobile || 'N/A'}
+                FF UID: ${user.ffUID || 'N/A'} <!-- NEW: Display FF UID here -->
                 Wallet Balance: ₹${(user.walletBalance || 0).toFixed(2)}
 
                 Registered Tournaments:
@@ -1328,30 +1560,34 @@
 
       // --- Upcoming Updates ---
       async function loadUpcomingUpdates() {
-        upcomingUpdatesList.innerHTML = '';
+        upcomingUpdatesTableBody.innerHTML = '';
         const upcomingUpdatesSnapshot = await db
           .collection('upcoming_updates')
-          .orderBy('timestamp', 'desc')
+          .orderBy('date', 'asc') // Order by date for upcoming
           .get();
+        if (upcomingUpdatesSnapshot.empty) {
+          upcomingUpdatesTableBody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-gray-400">No upcoming updates available.</td></tr>`;
+          return;
+        }
         upcomingUpdatesSnapshot.forEach((doc) => {
           const update = doc.data();
-          const date = update.timestamp
-            ? new Date(update.timestamp.toDate()).toLocaleString()
-            : 'N/A';
-          const li = `
-                    <li class="card flex justify-between items-center">
-                        <div>
-                            <p class="text-orange-400 font-bold mb-1">Upcoming Update:</p>
-                            <p class="text-sm text-gray-400 mb-2">${date}</p>
-                            <p>${update.content}</p>
-                        </div>
-                        <div>
+          const date = update.date || (update.timestamp ? new Date(update.timestamp.toDate()).toLocaleDateString() : 'N/A');
+          const row = `
+                    <tr class="table-row">
+                        <td>${update.name || 'N/A'}</td>
+                        <td>${update.mode || 'N/A'}</td>
+                        <td>₹${(update.entryFee || 0).toFixed(2)}</td>
+                        <td>₹${(update.prizePool || 0).toFixed(2)}</td>
+                        <td>${update.date || 'N/A'} ${update.time || 'N/A'}</td>
+                        <td>${update.registeredSeats || 'N/A'} / ${update.totalSeats || 'N/A'}</td>
+                        <td>${update.description || 'N/A'}</td>
+                        <td>
                             <button onclick="editUpcomingUpdate('${doc.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm mr-2">Edit</button>
                             <button onclick="deleteUpcomingUpdate('${doc.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm">Delete</button>
-                        </div>
-                    </li>
+                        </td>
+                    </tr>
                 `;
-          upcomingUpdatesList.innerHTML += li;
+          upcomingUpdatesTableBody.innerHTML += row;
         });
       }
 
@@ -1365,10 +1601,26 @@
       upcomingUpdateForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const id = document.getElementById('upcomingUpdateId').value;
-        const content = document.getElementById('upcomingUpdateContent').value;
+        const name = document.getElementById('upcomingUpdateName').value;
+        const mode = document.getElementById('upcomingUpdateMode').value;
+        const entryFee = parseFloat(document.getElementById('upcomingUpdateEntryFee').value);
+        const prizePool = parseFloat(document.getElementById('upcomingUpdatePrizePool').value);
+        const totalSeats = parseInt(document.getElementById('upcomingUpdateTotalSeats').value);
+        const registeredSeats = parseInt(document.getElementById('upcomingUpdateRegisteredSeats').value);
+        const date = document.getElementById('upcomingUpdateDate').value;
+        const time = document.getElementById('upcomingUpdateTime').value;
+        const description = document.getElementById('upcomingUpdateDescription').value;
 
         const updateData = {
-          content,
+          name,
+          mode,
+          entryFee,
+          prizePool,
+          totalSeats,
+          registeredSeats,
+          date,
+          time,
+          description,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         };
 
@@ -1393,7 +1645,15 @@
         const update = doc.data();
         upcomingUpdateModalTitle.innerText = 'Edit Upcoming Update';
         document.getElementById('upcomingUpdateId').value = id;
-        document.getElementById('upcomingUpdateContent').value = update.content;
+        document.getElementById('upcomingUpdateName').value = update.name || '';
+        document.getElementById('upcomingUpdateMode').value = update.mode || 'solo';
+        document.getElementById('upcomingUpdateEntryFee').value = update.entryFee || 0;
+        document.getElementById('upcomingUpdatePrizePool').value = update.prizePool || 0;
+        document.getElementById('upcomingUpdateTotalSeats').value = update.totalSeats || 0;
+        document.getElementById('upcomingUpdateRegisteredSeats').value = update.registeredSeats || 0;
+        document.getElementById('upcomingUpdateDate').value = update.date || '';
+        document.getElementById('upcomingUpdateTime').value = update.time || '';
+        document.getElementById('upcomingUpdateDescription').value = update.description || '';
         upcomingUpdateModal.style.display = 'flex';
       }
 
@@ -1410,28 +1670,216 @@
         }
       }
 
-      // --- Leaderboard Management (Dummy for now) ---
+      // --- Leaderboard Management ---
       async function loadLeaderboard() {
-        leaderboardTableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-gray-400">Leaderboard data will appear here. (Manual entry or game integration needed)</td></tr>`;
-        // In a real scenario, you would fetch leaderboard data from Firestore here
-        // Example:
-        // const leaderboardSnapshot = await db.collection('leaderboard').orderBy('points', 'desc').get();
-        // leaderboardSnapshot.forEach((doc, index) => {
-        //     const entry = doc.data();
-        //     const row = `
-        //         <tr class="table-row">
-        //             <td>${index + 1}</td>
-        //             <td>${entry.playerName}</td>
-        //             <td>${entry.kills}</td>
-        //             <td>${entry.points}</td>
-        //             <td>
-        //                 <button onclick="editLeaderboardEntry('${doc.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm mr-2">Edit</button>
-        //                 <button onclick="deleteLeaderboardEntry('${doc.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm">Delete</button>
-        //             </td>
-        //         </tr>
-        //     `;
-        //     leaderboardTableBody.innerHTML += row;
-        // });
+        leaderboardTableBody.innerHTML = '';
+        const leaderboardSnapshot = await db
+          .collection('leaderboard')
+          .orderBy('rank', 'asc')
+          .get();
+        if (leaderboardSnapshot.empty) {
+          leaderboardTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-400">Leaderboard data will appear here.</td></tr>`;
+          return;
+        }
+        leaderboardSnapshot.forEach((doc) => {
+          const entry = doc.data();
+          const row = `
+                    <tr class="table-row">
+                        <td>${entry.rank}</td>
+                        <td>${entry.playerName}</td>
+                        <td>${entry.uid}</td>
+                        <td>${entry.kills}</td>
+                        <td>₹${entry.winningPrize.toFixed(2)}</td>
+                        <td>
+                            <button onclick="editLeaderboardEntry('${doc.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm mr-2">Edit</button>
+                            <button onclick="deleteLeaderboardEntry('${doc.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm">Delete</button>
+                        </td>
+                    </tr>
+                `;
+          leaderboardTableBody.innerHTML += row;
+        });
+      }
+
+      addLeaderboardEntryBtn.addEventListener('click', async () => {
+        leaderboardEntryModalTitle.innerText = 'Add New Leaderboard Entry';
+        leaderboardEntryForm.reset();
+        document.getElementById('leaderboardEntryId').value = '';
+        await populateTournamentSelect(leaderboardTournamentIdSelect); // Populate dropdown
+        leaderboardEntryModal.style.display = 'flex';
+      });
+
+      async function populateTournamentSelect(selectElement) {
+        selectElement.innerHTML = '<option value="">Select Tournament</option>';
+        const tournamentsSnapshot = await db.collection('tournaments').get();
+        tournamentsSnapshot.forEach(doc => {
+          const tournament = doc.data();
+          const option = document.createElement('option');
+          option.value = doc.id;
+          option.innerText = tournament.name;
+          selectElement.appendChild(option);
+        });
+      }
+
+      leaderboardEntryForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('leaderboardEntryId').value;
+        const tournamentId = document.getElementById('leaderboardTournamentId').value; // NEW
+        const rank = parseInt(document.getElementById('leaderboardRank').value);
+        const playerName = document.getElementById('leaderboardPlayerName').value;
+        const uid = document.getElementById('leaderboardUID').value;
+        const kills = parseInt(document.getElementById('leaderboardKills').value);
+        const winningPrize = parseFloat(document.getElementById('leaderboardWinningPrize').value);
+
+        const entryData = {
+          tournamentId, // NEW
+          rank,
+          playerName,
+          uid,
+          kills,
+          winningPrize,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        };
+
+        try {
+          if (id) {
+            await db.collection('leaderboard').doc(id).update(entryData);
+            alert('Leaderboard entry updated successfully!');
+          } else {
+            await db.collection('leaderboard').add(entryData);
+            alert('Leaderboard entry added successfully!');
+          }
+          closeModal('leaderboardEntryModal');
+          loadLeaderboard();
+        } catch (error) {
+          console.error('Error saving leaderboard entry:', error);
+          alert('Failed to save leaderboard entry: ' + error.message);
+        }
+      });
+
+      async function editLeaderboardEntry(id) {
+        const doc = await db.collection('leaderboard').doc(id).get();
+        const entry = doc.data();
+        leaderboardEntryModalTitle.innerText = 'Edit Leaderboard Entry';
+        document.getElementById('leaderboardEntryId').value = id;
+        await populateTournamentSelect(leaderboardTournamentIdSelect); // Populate dropdown
+        document.getElementById('leaderboardTournamentId').value = entry.tournamentId || ''; // Select correct tournament
+        document.getElementById('leaderboardRank').value = entry.rank;
+        document.getElementById('leaderboardPlayerName').value = entry.playerName;
+        document.getElementById('leaderboardUID').value = entry.uid;
+        document.getElementById('leaderboardKills').value = entry.kills;
+        document.getElementById('leaderboardWinningPrize').value = entry.winningPrize;
+        leaderboardEntryModal.style.display = 'flex';
+      }
+
+      async function deleteLeaderboardEntry(id) {
+        if (confirm('Are you sure you want to delete this leaderboard entry?')) {
+          try {
+            await db.collection('leaderboard').doc(id).delete();
+            alert('Leaderboard entry deleted successfully!');
+            loadLeaderboard();
+          } catch (error) {
+            console.error('Error deleting leaderboard entry:', error);
+            alert('Failed to delete leaderboard entry: ' + error.message);
+          }
+        }
+      }
+
+      // --- NEW: Tournament History Management ---
+      async function loadTournamentHistory() {
+        tournamentHistoryTableBody.innerHTML = '';
+        const historySnapshot = await db
+          .collection('tournament_history')
+          .orderBy('date', 'desc')
+          .get();
+        if (historySnapshot.empty) {
+          tournamentHistoryTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-400">Tournament history will appear here.</td></tr>`;
+          return;
+        }
+        historySnapshot.forEach((doc) => {
+          const tournament = doc.data();
+          const row = `
+                    <tr class="table-row">
+                        <td>${tournament.name}</td>
+                        <td>${tournament.mode}</td>
+                        <td>₹${tournament.prizePool.toFixed(2)}</td>
+                        <td>${tournament.date}</td>
+                        <td>${tournament.status}</td>
+                        <td>
+                            <button onclick="editTournamentHistory('${doc.id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm mr-2">Edit</button>
+                            <button onclick="deleteTournamentHistory('${doc.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm">Delete</button>
+                        </td>
+                    </tr>
+                `;
+          tournamentHistoryTableBody.innerHTML += row;
+        });
+      }
+
+      addTournamentHistoryBtn.addEventListener('click', () => {
+        tournamentHistoryModalTitle.innerText = 'Add New Tournament History Entry';
+        tournamentHistoryForm.reset();
+        document.getElementById('historyEntryId').value = '';
+        document.getElementById('historyStatus').value = 'Completed'; // Default status
+        tournamentHistoryModal.style.display = 'flex';
+      });
+
+      tournamentHistoryForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('historyEntryId').value;
+        const name = document.getElementById('historyTournamentName').value;
+        const mode = document.getElementById('historyTournamentMode').value;
+        const prizePool = parseFloat(document.getElementById('historyPrizePool').value);
+        const date = document.getElementById('historyDate').value;
+        const status = document.getElementById('historyStatus').value;
+
+        const historyData = {
+          name,
+          mode,
+          prizePool,
+          date,
+          status,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        };
+
+        try {
+          if (id) {
+            await db.collection('tournament_history').doc(id).update(historyData);
+            alert('Tournament history entry updated successfully!');
+          } else {
+            await db.collection('tournament_history').add(historyData);
+            alert('Tournament history entry added successfully!');
+          }
+          closeModal('tournamentHistoryModal');
+          loadTournamentHistory();
+        } catch (error) {
+          console.error('Error saving tournament history entry:', error);
+          alert('Failed to save tournament history entry: ' + error.message);
+        }
+      });
+
+      async function editTournamentHistory(id) {
+        const doc = await db.collection('tournament_history').doc(id).get();
+        const entry = doc.data();
+        tournamentHistoryModalTitle.innerText = 'Edit Tournament History Entry';
+        document.getElementById('historyEntryId').value = id;
+        document.getElementById('historyTournamentName').value = entry.name;
+        document.getElementById('historyTournamentMode').value = entry.mode;
+        document.getElementById('historyPrizePool').value = entry.prizePool;
+        document.getElementById('historyDate').value = entry.date;
+        document.getElementById('historyStatus').value = entry.status;
+        tournamentHistoryModal.style.display = 'flex';
+      }
+
+      async function deleteTournamentHistory(id) {
+        if (confirm('Are you sure you want to delete this tournament history entry?')) {
+          try {
+            await db.collection('tournament_history').doc(id).delete();
+            alert('Tournament history entry deleted successfully!');
+            loadTournamentHistory();
+          } catch (error) {
+            console.error('Error deleting tournament history entry:', error);
+            alert('Failed to delete tournament history entry: ' + error.message);
+          }
+        }
       }
 
       // --- General Modal Functions ---
@@ -1448,6 +1896,12 @@
         }
         if (event.target == upcomingUpdateModal) {
           closeModal('upcomingUpdateModal');
+        }
+        if (event.target == leaderboardEntryModal) {
+          closeModal('leaderboardEntryModal');
+        }
+        if (event.target == tournamentHistoryModal) { // NEW
+          closeModal('tournamentHistoryModal');
         }
         if (event.target == viewPlayersModal) {
           closeModal('viewPlayersModal');
