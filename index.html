@@ -284,8 +284,7 @@
     <!-- Header/Navbar -->
     <header
       class="bg-black py-4 px-6 fixed w-full z-50 border-b border-orange-500"
-    >
-      <div class="container mx-auto flex justify-between items-center">
+    ><div class="flex justify-between items-center w-full px-4 md:px-8">
         <!-- Title adjusted to corner -->
         <div class="flex items-center">
           <span class="text-2xl font-bold text-orange-500">KILL STREAK</span>
@@ -791,27 +790,28 @@
             Latest Upcoming Tournament Updates:
           </h3>
           <div id="upcomingTournamentUpdates" class="space-y-4 text-gray-30">
-            <table class="tournament-details-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Mode</th>
-                  <th>Entry Fee</th>
-                  <th>Prize Pool</th>
-                  <th>Date &amp; Time</th>
-                  <th>Registered / Total</th>
-                  <th>Description/Rules</th>
-                </tr>
-              </thead>
-              <tbody id="upcomingUpdatesTableBody">
-                <tr>
-                  <td colspan="7" class="text-red-500 text-center">
-                    Error loading upcoming updates.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            <div class="overflow-x-auto">
+  <table class="tournament-details-table min-w-full text-sm">
+    <thead>
+      <tr class="bg-gray-800 text-orange-400">
+        <th class="px-4 py-2 whitespace-nowrap">Name</th>
+        <th class="px-4 py-2 whitespace-nowrap">Mode</th>
+        <th class="px-4 py-2 whitespace-nowrap">Entry Fee</th>
+        <th class="px-4 py-2 whitespace-nowrap">Prize Pool</th>
+        <th class="px-4 py-2 whitespace-nowrap">Date & Time</th>
+        <th class="px-4 py-2 whitespace-nowrap">Registered / Total</th>
+        <th class="px-4 py-2 whitespace-nowrap">Description/Rules</th>
+      </tr>
+    </thead>
+    <tbody id="upcomingUpdatesTableBody">
+      <tr>
+        <td colspan="7" class="text-center text-gray-400 py-4">
+          No upcoming updates available.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
         </div>
       </div>
     </section>
