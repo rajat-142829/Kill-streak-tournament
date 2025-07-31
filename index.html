@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -284,7 +285,8 @@
     <!-- Header/Navbar -->
     <header
       class="bg-black py-4 px-6 fixed w-full z-50 border-b border-orange-500"
-    ><div class="flex justify-between items-center w-full px-4 md:px-8">
+    >
+      <div class="flex justify-between items-center w-full px-4 md:px-8">
         <!-- Title adjusted to corner -->
         <div class="flex items-center">
           <span class="text-2xl font-bold text-orange-500">KILL STREAK</span>
@@ -305,7 +307,6 @@
             onclick="showViewTournamentSection()"
             >View Tournament</a
           >
-          <!-- Removed "Teams" link -->
           <a
             href="#leaderboard"
             class="text-gray-300 hover:text-orange-300 font-medium"
@@ -317,40 +318,42 @@
             class="text-gray-300 hover:text-orange-300 font-medium"
             >Terms and Conditions</a
           >
-          <!-- ADDED/MODIFIED: Onclick for Battle Royale -->
           <a
             href="#pro-play"
             class="text-gray-300 hover:text-orange-300 font-medium"
             onclick="showBattleRoyaleSection()"
             >Battle Royale</a
           >
-          <!-- ADDED/MODIFIED: Onclick for Rules -->
           <a
             href="#rules"
             class="text-gray-300 hover:text-orange-300 font-medium"
             onclick="showRulesSection()"
             >Rules</a
           >
-          <!-- ADDED: Admin Updates link -->
           <a
             href="#admin-updates-section"
             class="text-gray-300 hover:text-orange-300 font-medium flex items-center"
             onclick="showAdminUpdatesSection(); markUpdatesAsSeen()"
             >Admin Updates <span id="unreadUpdatesDot" class="hidden"></span
           ></a>
-          <!-- ADDED/MODIFIED: Onclick for Contact Us -->
           <a
             href="#contact"
             class="text-gray-300 hover:text-orange-300 font-medium"
             onclick="showContactSection()"
             >Contact Us</a
           >
-          <!-- NEW: Tournament History link -->
           <a
             href="#tournament-history"
             class="text-gray-300 hover:text-orange-300 font-medium"
             onclick="showTournamentHistorySection()"
             >Tournament History</a
+          >
+          <!-- NEW: Withdraw History link -->
+          <a
+            href="#withdraw-history"
+            class="text-gray-300 hover:text-orange-300 font-medium"
+            onclick="showWithdrawHistorySection()"
+            >Withdraw History</a
           >
         </nav>
 
@@ -390,7 +393,6 @@
     <!-- Mobile Navigation Overlay -->
     <div id="mobileNavOverlay" class="mobile-nav-overlay">
       <span class="close-mobile-nav" onclick="toggleMobileMenu()">×</span>
-      <!-- MODIFIED: Home button to scroll to top -->
       <a
         class="text-gray-300 hover:text-orange-300 font-medium"
         onclick="location.reload();"
@@ -399,35 +401,35 @@
       <a href="#tournaments" onclick="toggleMobileMenu(); showViewTournamentSection();"
         >View Tournament</a
       >
-      <!-- Removed "Teams" link -->
       <a href="#leaderboard" onclick="toggleMobileMenu(); showLeaderboardSection();"
         >Leaderboard</a
       >
       <a href="#profile" onclick="toggleMobileMenu(); showProfileSection();"
         >Your Registration</a
       >
-      <!-- ADDED/MODIFIED: Onclick for Battle Royale in mobile nav -->
       <a href="#pro-play" onclick="toggleMobileMenu(); showBattleRoyaleSection();"
         >Battle Royale</a
       >
-      <!-- ADDED/MODIFIED: Onclick for Rules in mobile nav -->
       <a href="#rules" onclick="toggleMobileMenu(); showRulesSection()">Rules</a>
-      <!-- ADDED: Admin Updates link in mobile nav -->
       <a
         href="#admin-updates-section"
         class="flex items-center"
         onclick="toggleMobileMenu(); showAdminUpdatesSection(); markUpdatesAsSeen()"
         >Admin Updates <span id="unreadUpdatesDotMobile" class="hidden"></span
       ></a>
-      <!-- ADDED/MODIFIED: Onclick for Contact Us in mobile nav -->
       <a href="#contact" onclick="toggleMobileMenu(); showContactSection()"
         >Contact Us</a
       >
-      <!-- NEW: Tournament History link in mobile nav -->
       <a
         href="#tournament-history"
         onclick="toggleMobileMenu(); showTournamentHistorySection()"
         >Tournament History</a
+      >
+      <!-- NEW: Withdraw History link in mobile nav -->
+      <a
+        href="#withdraw-history"
+        onclick="toggleMobileMenu(); showWithdrawHistorySection()"
+        >Withdraw History</a
       >
       <a
         href="#profile"
@@ -461,12 +463,6 @@
               >Login/Signup and Join Tournament</a
             >
           </div>
-          <!--    <div class="mt-6 text-center">
-            <button onclick="downloadHTML()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-md shadow-lg flex items-center justify-center mx-auto gap-2">
-              <i class="fas fa-download"></i> Download HTML Code
-            </button>
-          </div> -->
-          <!-- NEW: WhatsApp Community Button -->
           <div class="mt-4 text-center">
             <a
               href="https://t.me/+Pn_PLQV8JDg1NzA1"
@@ -479,7 +475,6 @@
               Join the Telegram community group for all tournament updates
             </p>
           </div>
-          <!-- NEW: Upcoming Tournament Button -->
           <div class="mt-4 text-center">
             <button
               onclick="checkLoginAndShowUpcomingTournaments()"
@@ -640,7 +635,6 @@
           <div class="space-y-4">
             <div>
               <p class="font-medium text-orange-400">Registered Tournaments:</p>
-              <!-- MODIFIED: List for registered tournaments -->
               <ul
                 id="registeredTournamentsList"
                 class="list-disc list-inside text-gray-300 ml-4"
@@ -791,27 +785,28 @@
           </h3>
           <div id="upcomingTournamentUpdates" class="space-y-4 text-gray-30">
             <div class="overflow-x-auto">
-  <table class="tournament-details-table min-w-full text-sm">
-    <thead>
-      <tr class="bg-gray-800 text-orange-400">
-        <th class="px-4 py-2 whitespace-nowrap">Name</th>
-        <th class="px-4 py-2 whitespace-nowrap">Mode</th>
-        <th class="px-4 py-2 whitespace-nowrap">Entry Fee</th>
-        <th class="px-4 py-2 whitespace-nowrap">Prize Pool</th>
-        <th class="px-4 py-2 whitespace-nowrap">Date & Time</th>
-        <th class="px-4 py-2 whitespace-nowrap">Registered / Total</th>
-        <th class="px-4 py-2 whitespace-nowrap">Description/Rules</th>
-      </tr>
-    </thead>
-    <tbody id="upcomingUpdatesTableBody">
-      <tr>
-        <td colspan="7" class="text-center text-gray-400 py-4">
-          No upcoming updates available.
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+              <table class="tournament-details-table min-w-full text-sm">
+                <thead>
+                  <tr class="bg-gray-800 text-orange-400">
+                    <th class="px-4 py-2 whitespace-nowrap">Name</th>
+                    <th class="px-4 py-2 whitespace-nowrap">Mode</th>
+                    <th class="px-4 py-2 whitespace-nowrap">Entry Fee</th>
+                    <th class="px-4 py-2 whitespace-nowrap">Prize Pool</th>
+                    <th class="px-4 py-2 whitespace-nowrap">Date & Time</th>
+                    <th class="px-4 py-2 whitespace-nowrap">Registered / Total</th>
+                    <th class="px-4 py-2 whitespace-nowrap">Description/Rules</th>
+                  </tr>
+                </thead>
+                <tbody id="upcomingUpdatesTableBody">
+                  <tr>
+                    <td colspan="7" class="text-center text-gray-400 py-4">
+                      No upcoming updates available.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -890,6 +885,44 @@
       </div>
     </section>
 
+    <!-- NEW: Withdraw History Section -->
+    <section id="withdraw-history" class="relative py-16 bg-gray-800 hidden pt-24">
+      <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center mb-8 text-orange-400">
+          WITHDRAWAL HISTORY
+        </h2>
+        <div
+          class="max-w-3xl mx-auto bg-gray-900 rounded-xl p-6 border border-orange-500 text-white relative"
+        >
+          <span class="close-button" onclick="hideWithdrawHistorySection()"
+            >×</span
+          >
+          <h3 class="text-xl font-bold mb-4 text-orange-400">
+            Your Withdrawal Records:
+          </h3>
+          <div id="withdrawHistoryContent" class="space-y-4 text-gray-300">
+            <table class="tournament-details-table">
+              <thead>
+                <tr>
+                  <th>Amount</th>
+                  <th>UPI ID</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="withdrawHistoryTableBody">
+                <tr>
+                  <td colspan="4" class="text-red-500 text-center">
+                    Error loading withdrawal history.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Contact Us Section -->
     <section id="contact" class="relative py-16 bg-gray-800">
       <div class="container mx-auto px-6">
@@ -899,7 +932,8 @@
         <div
           class="max-w-md mx-auto bg-gray-900 rounded-xl p-6 border border-orange-500 text-white"
         >
-          <form action="https://formsubmit.co/killstreaktournament@gmail.com" method="POST">
+          <!-- MODIFIED: Added action and method back for formsubmit.co -->
+          <form id="contactForm" onsubmit="handleContactFormSubmit(event)" action="https://formsubmit.co/killstreaktournament@gmail.com" method="POST">
             <input type="hidden" name="_captcha" value="false" />
 
             <div class="form-group">
@@ -949,6 +983,9 @@
               Send Message
             </button>
           </form>
+          <div id="contactSuccessMessage" class="hidden text-green-400 text-center mt-4">
+            Thank you for your message! We will get back to you soon.
+          </div>
         </div>
       </div>
     </section>
@@ -1336,7 +1373,6 @@ Step 2 - Click on Pay Button</textarea>
               >Sign Up</a
             >
           </p>
-          <!-- NEW: Forgot Password Button -->
           <p class="text-center text-gray-400 mt-2">
             <a
               href="#"
@@ -1412,7 +1448,7 @@ Step 2 - Click on Pay Button</textarea>
         projectId: 'kill-streak-tournament-50303', // <--- यहाँ अपना Firebase Project ID डालें
         storageBucket: 'kill-streak-tournament-50303.firebasestorage.app', // <--- यहाँ अपना Firebase Storage Bucket डालें
         messagingSenderId: '253309521755', // <--- यहाँ अपनी Firebase App ID डालें
-        appId: '1:253309521755:web:7799f296f0de38d84ed47e', // <--- यहाँ अपनी Firebase App ID डालें
+        appId: '1:253309521755:web:7799f296f0de38d847e', // <--- यहाँ अपनी Firebase App ID डालें (यह मैंने उदाहरण के लिए बदला है, आप अपनी सही ID डालें)
       };
 
       // Initialize Firebase
@@ -1593,6 +1629,7 @@ Step 2 - Click on Pay Button</textarea>
       var adminUpdatesSection = document.getElementById('admin-updates-section'); // NEW
       var tournamentHistorySection =
         document.getElementById('tournament-history'); // NEW
+      var withdrawHistorySection = document.getElementById('withdraw-history'); // NEW
       var profileNavLinkMobile = document.getElementById('profileNavLinkMobile');
       var loginSignupJoinBtn = document.getElementById('loginSignupJoinBtn');
       var walletSection = document.getElementById('walletSection');
@@ -1609,6 +1646,9 @@ Step 2 - Click on Pay Button</textarea>
       ); // For Upcoming Tournaments section
       var tournamentHistoryTableBody = document.getElementById(
         'tournamentHistoryTableBody'
+      ); // NEW
+      var withdrawHistoryTableBody = document.getElementById(
+        'withdrawHistoryTableBody'
       ); // NEW
 
       // Notification elements
@@ -2117,6 +2157,49 @@ Step 2 - Click on Pay Button</textarea>
         }
       }
 
+      // NEW: Function to render withdrawal history
+      async function renderWithdrawHistory() {
+        withdrawHistoryTableBody.innerHTML = '';
+        if (!isLoggedIn || !currentUser.uid) {
+          withdrawHistoryTableBody.innerHTML =
+            '<tr><td colspan="4" class="text-center py-4 text-gray-400">Please login to view your withdrawal history.</td></tr>';
+          return;
+        }
+        try {
+          const withdrawSnapshot = await db
+            .collection('withdrawals')
+            .where('userId', '==', currentUser.uid)
+            .orderBy('timestamp', 'desc')
+            .get();
+
+          if (withdrawSnapshot.empty) {
+            withdrawHistoryTableBody.innerHTML =
+              '<tr><td colspan="4" class="text-center py-4 text-gray-400">No withdrawal records found.</td></tr>';
+            return;
+          }
+
+          withdrawSnapshot.forEach((doc) => {
+            const withdrawal = doc.data();
+            const date = withdrawal.timestamp
+              ? new Date(withdrawal.timestamp.toDate()).toLocaleString()
+              : 'N/A';
+            const row = `
+                    <tr>
+                        <td>₹${withdrawal.amount.toFixed(2)}</td>
+                        <td>${withdrawal.upiId || 'N/A'}</td>
+                        <td>${date}</td>
+                        <td>${withdrawal.status || 'N/A'}</td>
+                    </tr>
+                `;
+            withdrawHistoryTableBody.innerHTML += row;
+          });
+        } catch (error) {
+          console.error('Error loading withdrawal history:', error);
+          withdrawHistoryTableBody.innerHTML =
+            '<tr><td colspan="4" class="text-red-500 text-center">Error loading withdrawal history.</td></tr>';
+        }
+      }
+
       // --- UI Update Function ---
       function updateUI() {
         if (isLoggedIn) {
@@ -2166,6 +2249,7 @@ Step 2 - Click on Pay Button</textarea>
           leaderboardSection.classList.add('hidden'); // Hide leaderboard on logout
           adminUpdatesSection.classList.add('hidden'); // Hide admin updates on logout
           tournamentHistorySection.classList.add('hidden'); // Hide tournament history on logout
+          withdrawHistorySection.classList.add('hidden'); // Hide withdraw history on logout
           profileNavLinkMobile.classList.add('hidden');
           joinNowBtn.classList.remove('hidden');
           currentWalletBalanceSpan.innerText = `₹0.00`;
@@ -2502,6 +2586,7 @@ Step 2 - Click on Pay Button</textarea>
         document.getElementById('leaderboard').classList.add('hidden'); // NEW
         document.getElementById('admin-updates-section').classList.add('hidden'); // NEW
         document.getElementById('tournament-history').classList.add('hidden'); // NEW
+        document.getElementById('withdraw-history').classList.add('hidden'); // NEW
 
         // Explicitly hide to override any inline styles
         document.getElementById('home').style.display = 'none';
@@ -2514,6 +2599,7 @@ Step 2 - Click on Pay Button</textarea>
         document.getElementById('leaderboard').style.display = 'none'; // NEW
         document.getElementById('admin-updates-section').style.display = 'none'; // NEW
         document.getElementById('tournament-history').style.display = 'none'; // NEW
+        document.getElementById('withdraw-history').style.display = 'none'; // NEW
       }
 
       function showProfileSection() {
@@ -2650,6 +2736,34 @@ Step 2 - Click on Pay Button</textarea>
       function hideTournamentHistorySection() {
         tournamentHistorySection.classList.add('hidden');
         tournamentHistorySection.style.display = 'none';
+        document.getElementById('home').classList.remove('hidden');
+        document.getElementById('home').style.display = 'block';
+        document.getElementById('pro-play').classList.remove('hidden');
+        document.getElementById('pro-play').style.display = 'block';
+        document.getElementById('rules').classList.remove('hidden');
+        document.getElementById('rules').style.display = 'block';
+        document.getElementById('contact').classList.remove('hidden');
+        document.getElementById('contact').style.display = 'block';
+        window.location.hash = '#home';
+      }
+
+      // NEW: Function to show withdraw history section
+      async function showWithdrawHistorySection() {
+        if (!isLoggedIn) {
+          alert('Please login to view your withdrawal history.');
+          openLoginSignupModal();
+          return;
+        }
+        hideAllMainContentSections();
+        withdrawHistorySection.classList.remove('hidden');
+        withdrawHistorySection.style.display = 'block';
+        await renderWithdrawHistory(); // Load withdrawal history data
+        withdrawHistorySection.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      function hideWithdrawHistorySection() {
+        withdrawHistorySection.classList.add('hidden');
+        withdrawHistorySection.style.display = 'none';
         document.getElementById('home').classList.remove('hidden');
         document.getElementById('home').style.display = 'block';
         document.getElementById('pro-play').classList.remove('hidden');
@@ -2951,6 +3065,61 @@ Step 2 - Click on Pay Button</textarea>
         }
       }
 
+      // NEW: Handle Contact Form Submit (AJAX with formsubmit.co)
+      async function handleContactFormSubmit(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const form = event.target;
+        const formData = new FormData(form);
+        const formProps = Object.fromEntries(formData);
+
+        // Show a temporary message or disable button to indicate submission
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.innerText;
+        submitButton.innerText = 'Sending...';
+        submitButton.disabled = true;
+
+        try {
+          // Send data to formsubmit.co using fetch API
+          const response = await fetch(form.action, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json', // Use JSON for fetch
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(formProps) // Send as JSON
+          });
+
+          if (response.ok) {
+            // Success
+            form.reset(); // Reset the form
+            document.getElementById('contactSuccessMessage').classList.remove('hidden'); // Show success message
+
+            // Hide success message after a few seconds
+            setTimeout(() => {
+              document.getElementById('contactSuccessMessage').classList.add('hidden');
+            }, 5000); // Hide after 5 seconds
+
+            // Optional: show an alert for immediate feedback
+            // alert('Your message has been sent successfully!');
+          } else {
+            // Handle errors from formsubmit.co
+            const errorData = await response.json();
+            console.error('Formsubmit.co error:', errorData);
+            alert('Failed to send message. Please try again later. Error: ' + (errorData.message || 'Unknown error'));
+          }
+
+        } catch (error) {
+          console.error('Error submitting contact form:', error);
+          alert('Failed to send message. Please check your internet connection and try again.');
+        } finally {
+          // Re-enable button and restore text
+          submitButton.innerText = originalButtonText;
+          submitButton.disabled = false;
+        }
+      }
+
+
       window.onclick = function (event) {
         if (event.target == loginSignupModal) {
           loginSignupModal.style.display = 'none';
@@ -2993,9 +3162,9 @@ Step 2 - Click on Pay Button</textarea>
         renderUpcomingTournamentUpdates();
         renderLeaderboard();
         renderTournamentHistory();
+        renderWithdrawHistory(); // NEW: Render withdraw history on load
         fetchAvailableTournaments();
-        updateUI(); // This will also trigger listenForAdminUpdates if user is logged in
-        // updateUnreadDot() is called within listenForAdminUpdates now
+        updateUI(); // This will trigger auth.onAuthStateChanged, which then starts listeners
       });
 
       // NEW: Function to check login status before showing upcoming tournaments
@@ -3247,10 +3416,10 @@ Step 2 - Click on Pay Button</textarea>
         renderUpcomingTournamentUpdates();
         renderLeaderboard();
         renderTournamentHistory();
+        renderWithdrawHistory(); // NEW: Render withdraw history on load
         fetchAvailableTournaments();
         updateUI(); // This will trigger auth.onAuthStateChanged, which then starts listeners
       });
     </script>
   </body>
 </html>
-
