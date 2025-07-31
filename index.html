@@ -899,28 +899,30 @@
         <div
           class="max-w-md mx-auto bg-gray-900 rounded-xl p-6 border border-orange-500 text-white"
         >
-          <form action="https://formspree.io/f/movllnzy" method="POST">
-  <input type="hidden" name="_captcha" value="false">
-  <input type="hidden" name="_next" value="https://killstreaktournament.netlify.app/thankyou.html">
+          <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+  <input type="hidden" name="form-name" value="contact">
+  <p hidden>
+    <label>Don’t fill this out: <input name="bot-field" /></label>
+  </p>
 
   <div class="form-group">
     <label for="contactName">Your Name:</label>
-    <input type="text" id="contactName" name="name" required placeholder="Your Name" />
+    <input type="text" id="contactName" name="name" required />
   </div>
 
   <div class="form-group">
     <label for="contactEmail">Your Email:</label>
-    <input type="email" id="contactEmail" name="email" required placeholder="Your Email" />
+    <input type="email" id="contactEmail" name="email" required />
   </div>
 
   <div class="form-group">
     <label for="contactSubject">Subject:</label>
-    <input type="text" id="contactSubject" name="subject" required placeholder="Subject" />
+    <input type="text" id="contactSubject" name="subject" required />
   </div>
 
   <div class="form-group">
     <label for="contactMessage">Message:</label>
-    <textarea id="contactMessage" name="message" rows="5" required placeholder="Your Message"></textarea>
+    <textarea id="contactMessage" name="message" rows="5" required></textarea>
   </div>
 
   <button
